@@ -1,5 +1,7 @@
 // import './assets/main.css'
 
+import keycloak from '@/keycloak.js'
+
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -27,10 +29,36 @@ const vuetify = createVuetify({
   },
 })
 
-const app = createApp(App)
+keycloak
+  .init({
+    onLoad: 'login-required',
+    checkLoginIframe: false,
+    pkceMethod: 'S256', // Optioneel, veiliger met PKCE
+    // Poging 2
+    // onLoad: 'check-sso',
+    // checkLoginIframe: true,
+    // checkLoginIframeInterval: 60, // Verhoog de intervaltijd
+    // Poging 1
+    // onLoad: 'login-required',
+    // checkLoginIframe: false, // Probeer het uitschakelen van de iframe-check
+    // silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html', // Optioneel
+    // pkceMethod: 'S256', // Gebruik PKCE voor veiliger authenticatie
+  })
+  .then(() => {
+    const app = createApp(App)
+    app.provide('keycloak', keycloak)
+    app.use(router)
+    app.use(vuetify)
+    //app.use(createPinia()) // If using Pinia
+    //app.use(i18n) // If has Multilang
+    app.mount('#app')
+  })
+  .catch((err) => console.error('Keycloak init failed', err))
 
-app.use(router)
+// const app = createApp(App)
 
-app.use(vuetify)
+// app.use(router)
 
-app.mount('#app')
+// app.use(vuetify)
+
+// app.mount('#app')
