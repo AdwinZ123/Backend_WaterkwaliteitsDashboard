@@ -97,5 +97,8 @@ export default {
     },
     required,
   },
+  mounted() {
+    //TODO GET beschikbare boeien API call
+  },
 }
 </script>

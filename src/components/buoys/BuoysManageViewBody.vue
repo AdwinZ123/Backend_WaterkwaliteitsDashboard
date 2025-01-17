@@ -31,219 +31,15 @@ export default {
   data() {
     return {
       isPageDataLoaded: false,
-      buoys: [
-        {
-          naam: 'Betere boei',
-          deveui: 'AF-01-HB-39-JI',
-        },
-        {
-          naam: 'Boei 1',
-          deveui: 'GG-99-HB-41-KL',
-        },
-      ],
-      deployments: [
-        {
-          deveui: 'AF-01-HB-39-JI',
-          plaatsingsdatum: '2024-01-01T12:00:00',
-          ophaaldatum: '2024-03-01T12:00:00',
-          locatie: '23.14587,-31.36589',
-          configuraties: [
-            {
-              deveui: 'AF-01-HB-39-JI',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 1,
-              sensor: {
-                id: 1,
-                type: 'zuurstof',
-              },
-              grenswaarden: {
-                deveui: 'AF-01-HB-39-JI',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 1,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'AF-01-HB-39-JI',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 2,
-              sensor: {
-                id: 2,
-                type: 'temperatuur',
-              },
-              grenswaarden: {
-                deveui: 'AF-01-HB-39-JI',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 2,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'AF-01-HB-39-JI',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 3,
-              sensor: {
-                id: 3,
-                type: 'troebelheid',
-              },
-              grenswaarden: {
-                deveui: 'AF-01-HB-39-JI',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 3,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'AF-01-HB-39-JI',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 4,
-              sensor: {
-                id: 4,
-                type: 'elektrische_geleiding',
-              },
-              grenswaarden: {
-                deveui: 'AF-01-HB-39-JI',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 4,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'AF-01-HB-39-JI',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 5,
-              sensor: {
-                id: 5,
-                type: 'pH',
-              },
-              grenswaarden: {
-                deveui: 'AF-01-HB-39-JI',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 5,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-          ],
-        },
-        {
-          deveui: 'GG-99-HB-41-KL',
-          plaatsingsdatum: '2024-01-01T12:00:00',
-          ophaaldatum: null,
-          locatie: '22.14587,-30.36589',
-          configuraties: [
-            {
-              deveui: 'GG-99-HB-41-KL',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 6,
-              sensor: {
-                id: 6,
-                type: 'zuurstof',
-              },
-              grenswaarden: {
-                deveui: 'GG-99-HB-41-KL',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 6,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'GG-99-HB-41-KL',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 7,
-              sensor: {
-                id: 7,
-                type: 'temperatuur',
-              },
-              grenswaarden: {
-                deveui: 'GG-99-HB-41-KL',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 7,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'GG-99-HB-41-KL',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 8,
-              sensor: {
-                id: 8,
-                type: 'troebelheid',
-              },
-              grenswaarden: {
-                deveui: 'GG-99-HB-41-KL',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 8,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'GG-99-HB-41-KL',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 9,
-              sensor: {
-                id: 9,
-                type: 'elektrische_geleiding',
-              },
-              grenswaarden: {
-                deveui: 'GG-99-HB-41-KL',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 9,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'GG-99-HB-41-KL',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 10,
-              sensor: {
-                id: 10,
-                type: 'pH',
-              },
-              grenswaarden: {
-                deveui: 'GG-99-HB-41-KL',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 10,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-          ],
-        },
-      ],
+      buoys: [],
+      deployments: [],
     }
   },
   methods: {
     addBuoy(buoy) {
       this.buoys.push(buoy)
+
+      //TODO create API call
     },
     updateLimitValue(configuration, badUpperLimit, goodUpperLimit, goodLowerLimit, badLowerLimit) {
       const deployment = this.deployments.find(
@@ -261,6 +57,8 @@ export default {
       configurationToUpdate.grenswaarden.goedboven = goodUpperLimit
       configurationToUpdate.grenswaarden.goedonder = goodLowerLimit
       configurationToUpdate.grenswaarden.slechtonder = badLowerLimit
+
+      //TODO update API call
     },
     replaceBuoy(deveuiOldBuoy, deveuiNewBuoy) {
       const currentDeployment = this.deployments.filter(
@@ -302,19 +100,44 @@ export default {
 
       this.addDeployment(newDeployment)
       this.updateDeploymentPickUpDate(deveuiOldBuoy)
+
+      //TODO create and update API calls
     },
     updateBuoyName(deveui, newName) {
       this.buoys.find((b) => b.deveui === deveui).naam = newName
+
+      //TODO update API call
     },
     addDeployment(newDeployment) {
       this.deployments.unshift(newDeployment)
+
+      //TODO create API call
     },
     updateDeploymentPickUpDate(deveui) {
       this.deployments.find((d) => d.deveui === deveui && d.ophaaldatum === null).ophaaldatum =
         getCurrentDateTimeString()
+
+      //TODO update API call
     },
   },
-  mounted() {
+  async mounted() {
+    // API calls for all data
+    const newBuoysArray = []
+    const newDeploymentsArray = []
+
+    // GET buoys
+    const buoysResponse = await fetch('http://20.56.155.132:5000/api/boeien')
+    const newBuoys = await buoysResponse.json()
+    newBuoys.forEach((buoy) => newBuoysArray.push(buoy))
+
+    // GET deployments
+    const deploymentsResponse = await fetch('http://20.56.155.132:5000/api/deployments')
+    const newDeployments = await deploymentsResponse.json()
+    newDeployments.forEach((deployment) => newDeploymentsArray.push(deployment))
+
+    this.buoys = newBuoysArray
+    this.deployments = newDeploymentsArray
+
     this.isPageDataLoaded = true
   },
 }

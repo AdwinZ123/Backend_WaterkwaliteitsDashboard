@@ -1,6 +1,11 @@
 <template>
+  <!-- Overlay met loading symbool -->
+  <v-overlay :value="!isPageDataLoaded">
+    <v-progress-circular indeterminate size="70" color="primary" />
+  </v-overlay>
+
   <!-- Sidebar filter menu -->
-  <v-navigation-drawer location="right" permanent class="w-auto">
+  <v-navigation-drawer v-if="isPageDataLoaded" location="right" permanent class="w-auto">
     <!-- Boei selecteren -->
     <v-container>
       <h3>Boeien</h3>
@@ -63,402 +68,9 @@ export default {
       selectedItem: null,
       selectedBuoy: null,
       selectedDeployments: [],
-      buoys: [
-        {
-          naam: 'Betere boei',
-          deveui: 'AF-01-HB-39-JI',
-        },
-        {
-          naam: 'Boei 1',
-          deveui: 'GG-99-HB-41-KL',
-        },
-      ],
-      deployments: [
-        {
-          deveui: 'AF-01-HB-39-JI',
-          plaatsingsdatum: '2024-01-01T12:00:00',
-          ophaaldatum: '2024-03-01T12:00:00',
-          locatie: '23.14587,-31.36589',
-          configuraties: [
-            {
-              deveui: 'AF-01-HB-39-JI',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 1,
-              sensor: {
-                id: 1,
-                type: 'zuurstof',
-              },
-              grenswaarden: {
-                deveui: 'AF-01-HB-39-JI',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 1,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'AF-01-HB-39-JI',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 2,
-              sensor: {
-                id: 2,
-                type: 'temperatuur',
-              },
-              grenswaarden: {
-                deveui: 'AF-01-HB-39-JI',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 2,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'AF-01-HB-39-JI',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 3,
-              sensor: {
-                id: 3,
-                type: 'troebelheid',
-              },
-              grenswaarden: {
-                deveui: 'AF-01-HB-39-JI',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 3,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'AF-01-HB-39-JI',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 4,
-              sensor: {
-                id: 4,
-                type: 'elektrische_geleiding',
-              },
-              grenswaarden: {
-                deveui: 'AF-01-HB-39-JI',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 4,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'AF-01-HB-39-JI',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 5,
-              sensor: {
-                id: 5,
-                type: 'pH',
-              },
-              grenswaarden: {
-                deveui: 'AF-01-HB-39-JI',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 5,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-          ],
-        },
-        {
-          deveui: 'GG-99-HB-41-KL',
-          plaatsingsdatum: '2024-01-01T12:00:00',
-          ophaaldatum: null,
-          locatie: '22.14587,-30.36589',
-          configuraties: [
-            {
-              deveui: 'GG-99-HB-41-KL',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 6,
-              sensor: {
-                id: 6,
-                type: 'zuurstof',
-              },
-              grenswaarden: {
-                deveui: 'GG-99-HB-41-KL',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 6,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'GG-99-HB-41-KL',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 7,
-              sensor: {
-                id: 7,
-                type: 'temperatuur',
-              },
-              grenswaarden: {
-                deveui: 'GG-99-HB-41-KL',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 7,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'GG-99-HB-41-KL',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 8,
-              sensor: {
-                id: 8,
-                type: 'troebelheid',
-              },
-              grenswaarden: {
-                deveui: 'GG-99-HB-41-KL',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 8,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'GG-99-HB-41-KL',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 9,
-              sensor: {
-                id: 9,
-                type: 'elektrische_geleiding',
-              },
-              grenswaarden: {
-                deveui: 'GG-99-HB-41-KL',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 9,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'GG-99-HB-41-KL',
-              plaatsingsdatum: '2024-01-01T12:00:00',
-              id: 10,
-              sensor: {
-                id: 10,
-                type: 'pH',
-              },
-              grenswaarden: {
-                deveui: 'GG-99-HB-41-KL',
-                plaatsingsdatum: '2024-01-01T12:00:00',
-                id: 10,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-          ],
-        },
-        {
-          deveui: 'GG-99-HB-41-KL',
-          plaatsingsdatum: '2023-01-01T12:00:00',
-          ophaaldatum: '2023-10-10T12:00:00',
-          locatie: '23.14587,-31.36589',
-          configuraties: [
-            {
-              deveui: 'GG-99-HB-41-KL',
-              plaatsingsdatum: '2023-01-01T12:00:00',
-              id: 6,
-              sensor: {
-                id: 6,
-                type: 'zuurstof',
-              },
-              grenswaarden: {
-                deveui: 'GG-99-HB-41-KL',
-                plaatsingsdatum: '2023-01-01T12:00:00',
-                id: 6,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'GG-99-HB-41-KL',
-              plaatsingsdatum: '2023-01-01T12:00:00',
-              id: 7,
-              sensor: {
-                id: 7,
-                type: 'temperatuur',
-              },
-              grenswaarden: {
-                deveui: 'GG-99-HB-41-KL',
-                plaatsingsdatum: '2023-01-01T12:00:00',
-                id: 7,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'GG-99-HB-41-KL',
-              plaatsingsdatum: '2023-01-01T12:00:00',
-              id: 8,
-              sensor: {
-                id: 8,
-                type: 'troebelheid',
-              },
-              grenswaarden: {
-                deveui: 'GG-99-HB-41-KL',
-                plaatsingsdatum: '2023-01-01T12:00:00',
-                id: 8,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'GG-99-HB-41-KL',
-              plaatsingsdatum: '2023-01-01T12:00:00',
-              id: 9,
-              sensor: {
-                id: 9,
-                type: 'elektrische_geleiding',
-              },
-              grenswaarden: {
-                deveui: 'GG-99-HB-41-KL',
-                plaatsingsdatum: '2023-01-01T12:00:00',
-                id: 9,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-            {
-              deveui: 'GG-99-HB-41-KL',
-              plaatsingsdatum: '2023-01-01T12:00:00',
-              id: 10,
-              sensor: {
-                id: 10,
-                type: 'pH',
-              },
-              grenswaarden: {
-                deveui: 'GG-99-HB-41-KL',
-                plaatsingsdatum: '2023-01-01T12:00:00',
-                id: 10,
-                slechtboven: 30.3,
-                goedboven: 25.0,
-                goedonder: 20.5,
-                slechtonder: 18.4,
-              },
-            },
-          ],
-        },
-      ],
-      measurements: [
-        {
-          deveui: 'AF-01-HB-39-JI',
-          tijdstempel: '2024-01-10T12:00:00',
-          waarde: {
-            temperatuur: 24.1,
-            pH: 7.6,
-            elektrische_geleiding: 500,
-            troebelheid: 430,
-            zuurstof: 3.4,
-          },
-        },
-        {
-          deveui: 'AF-01-HB-39-JI',
-          tijdstempel: '2024-02-10T12:00:00',
-          waarde: {
-            temperatuur: 20.7,
-            pH: 6.9,
-            elektrische_geleiding: 800,
-            troebelheid: 200,
-            zuurstof: 1.2,
-          },
-        },
-        {
-          deveui: 'AF-01-HB-39-JI',
-          tijdstempel: '2024-02-10T18:34:00',
-          waarde: {
-            temperatuur: 24.1,
-            pH: 7.6,
-            elektrische_geleiding: 500,
-            troebelheid: 430,
-            zuurstof: 3.4,
-          },
-        },
-        {
-          deveui: 'GG-99-HB-41-KL',
-          tijdstempel: '2024-01-10T12:00:00',
-          waarde: {
-            temperatuur: 24.1,
-            pH: 7.6,
-            elektrische_geleiding: 500,
-            troebelheid: 430,
-            zuurstof: 8.4,
-          },
-        },
-        {
-          deveui: 'GG-99-HB-41-KL',
-          tijdstempel: '2024-02-10T12:00:00',
-          waarde: {
-            temperatuur: 20.7,
-            pH: 6.9,
-            elektrische_geleiding: 800,
-            troebelheid: 200,
-            zuurstof: -1.2,
-          },
-        },
-        {
-          deveui: 'GG-99-HB-41-KL',
-          tijdstempel: '2024-02-10T18:34:00',
-          waarde: {
-            temperatuur: 24.1,
-            pH: 7.6,
-            elektrische_geleiding: 500,
-            troebelheid: 430,
-            zuurstof: 5,
-          },
-        },
-        {
-          deveui: 'GG-99-HB-41-KL',
-          tijdstempel: '2023-02-10T18:34:00',
-          waarde: {
-            temperatuur: 24.1,
-            pH: 7.6,
-            elektrische_geleiding: 500,
-            troebelheid: 430,
-            zuurstof: 5,
-          },
-        },
-        {
-          deveui: 'GG-99-HB-41-KL',
-          tijdstempel: '2023-04-10T18:34:00',
-          waarde: {
-            temperatuur: 24.1,
-            pH: 7.6,
-            elektrische_geleiding: 500,
-            troebelheid: 430,
-            zuurstof: 5,
-          },
-        },
-      ],
+      buoys: [],
+      deployments: [],
+      measurements: [],
       locations: [
         {
           locatie: '23.14587,-31.36589',
@@ -492,7 +104,39 @@ export default {
       this.showSelectedBuoyInfo = true
     },
   },
-  mounted() {
+  async mounted() {
+    // API calls for all data
+    const newMeasurementsArray = []
+    const newBuoysArray = []
+    const newDeploymentsArray = []
+
+    // GET measurements
+    const measurementsResponse = await fetch('http://20.56.155.132:5000/api/metingen')
+    const newMeasurements = await measurementsResponse.json()
+    newMeasurements.forEach((measurement) => {
+      newMeasurementsArray.push({
+        deveui: measurement.deveui,
+        tijdstempel: measurement.tijdstempel,
+        waarde: JSON.parse(measurement.waarde),
+      })
+    })
+
+    // GET buoys
+    const buoysResponse = await fetch('http://20.56.155.132:5000/api/boeien')
+    const newBuoys = await buoysResponse.json()
+    newBuoys.forEach((buoy) => newBuoysArray.push(buoy))
+
+    // GET deployments
+    const deploymentsResponse = await fetch('http://20.56.155.132:5000/api/deployments')
+    const newDeployments = await deploymentsResponse.json()
+    newDeployments.forEach((deployment) => newDeploymentsArray.push(deployment))
+
+    this.measurements = newMeasurementsArray
+    this.buoys = newBuoysArray
+    this.deployments = newDeploymentsArray
+
+    //TODO GET locaties API call
+
     // Selecteer het eerste item bij het laden van de component
     if (this.buoys.length > 0) {
       this.selectedItem = this.buoys[0].deveui
