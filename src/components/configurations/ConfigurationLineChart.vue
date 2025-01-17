@@ -55,6 +55,8 @@ export default {
             // // Red
             // gradientBack.addColorStop(1, 'rgba(255, 0, 0,1)')
 
+            //TODO achtergrondkleur aanpassen op basis van de grenswaarden
+            //      mogelijk ook tabel min en max waarde geven...
             // Direcht
             // Red
             gradientBack.addColorStop(0, 'rgba(255, 0, 0,1)')

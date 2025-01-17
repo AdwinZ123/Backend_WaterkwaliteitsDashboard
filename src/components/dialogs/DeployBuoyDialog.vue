@@ -109,43 +109,7 @@ export default {
       isLoading: false,
       isDialogActive: false,
       selectedItem: null,
-      standardLimitValues: [
-        {
-          type: 'zuurstof',
-          slechtboven: 30.3,
-          goedboven: 25.0,
-          goedonder: 20.5,
-          slechtonder: 18.4,
-        },
-        {
-          type: 'temperatuur',
-          slechtboven: 30.3,
-          goedboven: 25.0,
-          goedonder: 20.5,
-          slechtonder: 18.4,
-        },
-        {
-          type: 'troebelheid',
-          slechtboven: 30.3,
-          goedboven: 25.0,
-          goedonder: 20.5,
-          slechtonder: 18.4,
-        },
-        {
-          type: 'elektrische_geleiding',
-          slechtboven: 30.3,
-          goedboven: 25.0,
-          goedonder: 20.5,
-          slechtonder: 18.4,
-        },
-        {
-          type: 'pH',
-          slechtboven: 30.3,
-          goedboven: 25.0,
-          goedonder: 20.5,
-          slechtonder: 18.4,
-        },
-      ],
+      standardLimitValues: [],
       sensorTypes: [],
       sensorOptions: [],
       availableSensors: [
@@ -221,6 +185,8 @@ export default {
           id = 999 - i
         }
 
+        //TODO create sensor API call
+
         const selectedStandardLimitValue = this.standardLimitValues.find(
           (limitValue) => limitValue.type === sensor.type,
         )
@@ -256,7 +222,23 @@ export default {
     },
     required,
   },
-  mounted() {
+  async mounted() {
+    // API calls for all data
+    const newStandardLimitValuesArray = []
+
+    // GET standard limit values
+    const standardLimitValuesResponse = await fetch(
+      'http://20.56.155.132:5000/api/standaard-grenswaarden',
+    )
+    const newStandardLimitValues = await standardLimitValuesResponse.json()
+    newStandardLimitValues.forEach((standardLimitValue) =>
+      newStandardLimitValuesArray.push(standardLimitValue),
+    )
+
+    //TODO GET beschikbare sensoren API call
+
+    this.standardLimitValues = newStandardLimitValuesArray
+
     this.standardLimitValues.forEach((limitValue) => {
       const sensorInfo = getSensorTypeInfo(limitValue.type)
 

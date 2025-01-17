@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isPageDataLoaded">
     <h1>Standaard grenswaarden beheren</h1>
     <br />
 
@@ -19,43 +19,8 @@ export default {
   components: { StandardLimitValuesDetailsBody },
   data() {
     return {
-      standardLimitValues: [
-        {
-          type: 'zuurstof',
-          slechtboven: 30.3,
-          goedboven: 25.0,
-          goedonder: 20.5,
-          slechtonder: 18.4,
-        },
-        {
-          type: 'temperatuur',
-          slechtboven: 30.3,
-          goedboven: 25.0,
-          goedonder: 20.5,
-          slechtonder: 18.4,
-        },
-        {
-          type: 'troebelheid',
-          slechtboven: 30.3,
-          goedboven: 25.0,
-          goedonder: 20.5,
-          slechtonder: 18.4,
-        },
-        {
-          type: 'elektrische_geleiding',
-          slechtboven: 30.3,
-          goedboven: 25.0,
-          goedonder: 20.5,
-          slechtonder: 18.4,
-        },
-        {
-          type: 'pH',
-          slechtboven: 30.3,
-          goedboven: 25.0,
-          goedonder: 20.5,
-          slechtonder: 18.4,
-        },
-      ],
+      isPageDataLoaded: false,
+      standardLimitValues: [],
     }
   },
   methods: {
@@ -82,7 +47,26 @@ export default {
       standardLimitValueToUpdate.goedboven = goodUpperLimit
       standardLimitValueToUpdate.goedonder = goodLowerLimit
       standardLimitValueToUpdate.slechtonder = badLowerLimit
+
+      //TODO update API call
     },
+  },
+  async mounted() {
+    // API calls for all data
+    const newStandardLimitValuesArray = []
+
+    // GET standard limit values
+    const standardLimitValuesResponse = await fetch(
+      'http://20.56.155.132:5000/api/standaard-grenswaarden',
+    )
+    const newStandardLimitValues = await standardLimitValuesResponse.json()
+    newStandardLimitValues.forEach((standardLimitValue) =>
+      newStandardLimitValuesArray.push(standardLimitValue),
+    )
+
+    this.standardLimitValues = newStandardLimitValuesArray
+
+    this.isPageDataLoaded = true
   },
 }
 </script>
