@@ -136,6 +136,7 @@ export default {
     this.deployments = newDeploymentsArray
 
     //TODO GET locaties API call
+    // https://schoolapi.adwinzijderveld.nl/api/locaties
 
     // Selecteer het eerste item bij het laden van de component
     if (this.buoys.length > 0) {

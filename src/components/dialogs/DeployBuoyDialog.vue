@@ -186,6 +186,7 @@ export default {
         }
 
         //TODO create sensor API call
+        // POST https://schoolapi.adwinzijderveld.nl/api/sensoren {"type": 'mijn waarde'}
 
         const selectedStandardLimitValue = this.standardLimitValues.find(
           (limitValue) => limitValue.type === sensor.type,
@@ -236,6 +237,7 @@ export default {
     )
 
     //TODO GET beschikbare sensoren API call
+    // https://schoolapi.adwinzijderveld.nl/api/beschikbare-sensoren
 
     this.standardLimitValues = newStandardLimitValuesArray
 

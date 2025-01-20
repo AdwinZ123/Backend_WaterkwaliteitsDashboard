@@ -40,6 +40,7 @@ export default {
       this.buoys.push(buoy)
 
       //TODO create API call
+      // POST https://schoolapi.adwinzijderveld.nl/api/boeien {"deveui": 'mijn waarde', "naam": 'mijn waarde'}
     },
     updateLimitValue(configuration, badUpperLimit, goodUpperLimit, goodLowerLimit, badLowerLimit) {
       const deployment = this.deployments.find(
@@ -100,8 +101,6 @@ export default {
 
       this.addDeployment(newDeployment)
       this.updateDeploymentPickUpDate(deveuiOldBuoy)
-
-      //TODO create and update API calls
     },
     updateBuoyName(deveui, newName) {
       this.buoys.find((b) => b.deveui === deveui).naam = newName
@@ -112,6 +111,11 @@ export default {
       this.deployments.unshift(newDeployment)
 
       //TODO create API call
+      // POST https://schoolapi.adwinzijderveld.nl/api/deployments {newDeployment object}
+
+      // Create deployment
+      //    Create meerdere configuraties
+      //        Create grenswaarden
     },
     updateDeploymentPickUpDate(deveui) {
       this.deployments.find((d) => d.deveui === deveui && d.ophaaldatum === null).ophaaldatum =

@@ -99,6 +99,7 @@ export default {
   },
   mounted() {
     //TODO GET beschikbare boeien API call
+    // https://schoolapi.adwinzijderveld.nl/api/beschikbare-boeien
   },
 }
 </script>
