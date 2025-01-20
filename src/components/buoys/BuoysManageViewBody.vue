@@ -126,12 +126,12 @@ export default {
     const newDeploymentsArray = []
 
     // GET buoys
-    const buoysResponse = await fetch('http://20.56.155.132:5000/api/boeien')
+    const buoysResponse = await fetch('https://schoolapi.adwinzijderveld.nl/api/boeien')
     const newBuoys = await buoysResponse.json()
     newBuoys.forEach((buoy) => newBuoysArray.push(buoy))
 
     // GET deployments
-    const deploymentsResponse = await fetch('http://20.56.155.132:5000/api/deployments')
+    const deploymentsResponse = await fetch('https://schoolapi.adwinzijderveld.nl/api/deployments')
     const newDeployments = await deploymentsResponse.json()
     newDeployments.forEach((deployment) => newDeploymentsArray.push(deployment))
 
