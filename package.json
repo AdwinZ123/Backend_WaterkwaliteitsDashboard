@@ -16,7 +16,8 @@
     "vue-chartjs": "^5.3.2",
     "vue-router": "^4.4.5",
     "vuetify": "^3.7.5",
-    "mapbox-gl": "^3.8.0"
+    "mapbox-gl": "^3.8.0",
+    "keycloak-js": "^26.0.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
