@@ -57,7 +57,7 @@ export default {
 
     // GET standard limit values
     const standardLimitValuesResponse = await fetch(
-      'http://20.56.155.132:5000/api/standaard-grenswaarden',
+      'https://schoolapi.adwinzijderveld.nl/api/standaard-grenswaarden',
     )
     const newStandardLimitValues = await standardLimitValuesResponse.json()
     newStandardLimitValues.forEach((standardLimitValue) =>
