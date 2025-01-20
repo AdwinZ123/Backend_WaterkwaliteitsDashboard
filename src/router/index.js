@@ -9,6 +9,7 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      alias: '/home',
     },
     {
       path: '/login',
@@ -31,7 +32,14 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !keycloak.authenticated) {
-    keycloak.login() // Stuur gebruikers naar de Keycloak-loginpagina
+    keycloak
+      .login()
+      .then(() => {
+        window.location.href = '/'
+      })
+      .catch((error) => {
+        console.error('Fout tijdens de Keycloak callback', error)
+      }) // Stuur gebruikers naar de Keycloak-loginpagina
   } else {
     next()
   }
