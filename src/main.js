@@ -45,7 +45,7 @@ const keycloak = new Keycloak({
 // let keycloak = new Keycloak(initOptions)
 
 keycloak
-  .init({ onLoad: 'login-required' })
+  .init({ onLoad: 'login-required', checkLoginIframe: false, pkceMethod: 'S256' })
   .then((auth) => {
     if (!auth) {
       window.location.reload()
