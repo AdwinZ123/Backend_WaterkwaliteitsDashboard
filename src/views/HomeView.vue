@@ -112,6 +112,7 @@ export default {
         waarde: JSON.parse(measurement.waarde),
       })
     })
+    console.log(newMeasurementsArray)
 
     // GET buoys
     const buoysResponse = await fetch('https://schoolapi.adwinzijderveld.nl/api/boeien')

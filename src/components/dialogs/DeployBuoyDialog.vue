@@ -182,7 +182,7 @@ export default {
 
       this.isDialogActive = true
     },
-    onSubmit() {
+    async onSubmit() {
       if (!this.form) return
 
       const selectedSensors = this.sensorOptions.filter((sensor) => sensor.enabled === true)
@@ -204,14 +204,30 @@ export default {
         configuraties: [],
       }
 
-      selectedSensors.forEach((sensor, i) => {
+      selectedSensors.forEach(async (sensor) => {
         let id = sensor.id
         if (id == null) {
-          id = 999 - i
-        }
+          //TODO create sensor API call
+          // POST https://schoolapi.adwinzijderveld.nl/api/sensoren {"type": 'mijn waarde'}
+          try {
+            const addSensorResponse = await fetch(
+              'https://schoolapi.adwinzijderveld.nl/api/sensoren',
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: { type: sensor.type },
+              },
+            )
 
-        //TODO create sensor API call
-        // POST https://schoolapi.adwinzijderveld.nl/api/sensoren {"type": 'mijn waarde'}
+            const newCreatedSensor = await addSensorResponse.json()
+            console.log(newCreatedSensor)
+            id = newCreatedSensor.id
+          } catch (error) {
+            console.error(error)
+          }
+        }
 
         const selectedStandardLimitValue = this.standardLimitValues.find(
           (limitValue) => limitValue.type === sensor.type,
