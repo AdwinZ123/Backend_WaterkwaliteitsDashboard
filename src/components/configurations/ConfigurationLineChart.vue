@@ -4,7 +4,7 @@
     <LineChartJS
       :options="chartOptions"
       :data="getChartData()"
-      :plugins="plugins"
+      :plugins="getPlugins()"
       style="max-height: 250px"
     />
     <br />
@@ -32,47 +32,63 @@ export default {
   props: ['buoy', 'configuration', 'measurements'],
   data() {
     return {
+      minValue: 0.0,
+      maxValue: 0.0,
       isPageDataLoaded: false,
       sensorInfo: null,
-      plugins: [
+      chartOptions: null,
+    }
+  },
+  methods: {
+    getPlugins() {
+      return [
         {
-          beforeDraw: function (chart) {
-            const ctx = chart.ctx
-            const canvas = chart.canvas
-            const chartArea = chart.chartArea
+          beforeDraw: (chart) => {
+            const { canvas, ctx, chartArea } = chart
 
-            // Chart background
-            var gradientBack = canvas.getContext('2d').createLinearGradient(0, 250, 0, 0)
-            // // Overgang
-            // // Red
-            // gradientBack.addColorStop(0, 'rgba(255, 0, 0,1)')
-            // // Orange
-            // gradientBack.addColorStop(0.3, 'rgba(255, 165, 0,1)')
-            // // Green
-            // gradientBack.addColorStop(0.5, 'rgba(0, 255, 0,1)')
-            // // Orange
-            // gradientBack.addColorStop(0.7, 'rgba(255, 165, 0,1)')
-            // // Red
-            // gradientBack.addColorStop(1, 'rgba(255, 0, 0,1)')
+            // Controleer of data beschikbaar is
+            if (
+              !this.configuration ||
+              !this.configuration.grenswaarden ||
+              this.minValue === undefined ||
+              this.maxValue === undefined
+            ) {
+              return
+            }
 
-            //TODO achtergrondkleur aanpassen op basis van de grenswaarden
-            //      mogelijk ook tabel min en max waarde geven...
-            // Direcht
-            // Red
-            gradientBack.addColorStop(0, 'rgba(255, 0, 0,1)')
-            gradientBack.addColorStop(0.2, 'rgba(255, 0, 0,1)')
-            // Orange
-            gradientBack.addColorStop(0.21, 'rgba(255, 165, 0,1)')
-            gradientBack.addColorStop(0.4, 'rgba(255, 165, 0,1)')
-            // Green
-            gradientBack.addColorStop(0.41, 'rgba(0, 255, 0,1)')
-            gradientBack.addColorStop(0.6, 'rgba(0, 255, 0,1)')
-            // Orange
-            gradientBack.addColorStop(0.61, 'rgba(255, 165, 0,1)')
-            gradientBack.addColorStop(0.8, 'rgba(255, 165, 0,1)')
-            // RED
-            gradientBack.addColorStop(0.81, 'rgba(255, 0, 0,1)')
-            gradientBack.addColorStop(1, 'rgba(255, 0, 0,1)')
+            console.log(this.configuration.sensor.type)
+            console.log(this.configuration.grenswaarden)
+            const slechtonder = this.configuration.grenswaarden.slechtonder
+            const goedonder = this.configuration.grenswaarden.goedonder
+            const goedboven = this.configuration.grenswaarden.goedboven
+            const slechtboven = this.configuration.grenswaarden.slechtboven
+
+            const min = this.minValue
+            const max = this.maxValue
+
+            // Helper functie om een waarde naar een ratio te converteren en binnen [0, 1] te begrenzen
+            const calculateRatio = (value) => {
+              const ratio = (value - min) / (max - min)
+              return Math.max(0, Math.min(1, ratio)) // Begrens de waarde tussen 0 en 1
+            }
+
+            const slechtonderRatio = calculateRatio(slechtonder)
+            const goedonderRatio = calculateRatio(goedonder)
+            const goedbovenRatio = calculateRatio(goedboven)
+            const slechtbovenRatio = calculateRatio(slechtboven)
+
+            const gradientBack = canvas.getContext('2d').createLinearGradient(0, 250, 0, 0)
+
+            gradientBack.addColorStop(0, 'rgba(255, 0, 0, 1)')
+            gradientBack.addColorStop(slechtonderRatio, 'rgba(255, 0, 0, 1)')
+            gradientBack.addColorStop(slechtonderRatio, 'rgba(255, 165, 0, 1)')
+            gradientBack.addColorStop(goedonderRatio, 'rgba(255, 165, 0, 1)')
+            gradientBack.addColorStop(goedonderRatio, 'rgba(0, 255, 0, 1)')
+            gradientBack.addColorStop(goedbovenRatio, 'rgba(0, 255, 0, 1)')
+            gradientBack.addColorStop(goedbovenRatio, 'rgba(255, 165, 0, 1)')
+            gradientBack.addColorStop(slechtbovenRatio, 'rgba(255, 165, 0, 1)')
+            gradientBack.addColorStop(slechtbovenRatio, 'rgba(255, 0, 0, 1)')
+            gradientBack.addColorStop(1, 'rgba(255, 0, 0, 1)')
 
             ctx.fillStyle = gradientBack
             ctx.fillRect(
@@ -83,13 +99,8 @@ export default {
             )
           },
         },
-      ],
-      chartOptions: {
-        responsive: true,
-      },
-    }
-  },
-  methods: {
+      ]
+    },
     getSensorTypeInfo,
     getChartData() {
       const newLabels = []
@@ -116,6 +127,44 @@ export default {
     },
   },
   mounted() {
+    console.log(this.configuration)
+    switch (this.configuration.sensor.type) {
+      case 'temperatuur':
+        this.minValue = -10
+        this.maxValue = 40
+        break
+      case 'zuurstof':
+        this.minValue = 0.0
+        this.maxValue = 10.0
+        break
+      case 'troebelheid':
+        this.minValue = 0
+        this.maxValue = 2000
+        break
+      case 'elektrische_geleiding':
+        this.minValue = 0
+        this.maxValue = 1500
+        break
+      case 'pH':
+        this.minValue = 0.0
+        this.maxValue = 14.0
+        break
+      default:
+        this.minValue = -10
+        this.maxValue = 40
+        break
+    }
+
+    this.chartOptions = {
+      responsive: true,
+      scales: {
+        y: {
+          min: this.minValue,
+          max: this.maxValue,
+        },
+      },
+    }
+
     this.sensorInfo = getSensorTypeInfo(this.configuration.sensor.type)
 
     this.isPageDataLoaded = true
