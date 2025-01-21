@@ -112,11 +112,7 @@ export default {
       standardLimitValues: [],
       sensorTypes: [],
       sensorOptions: [],
-      availableSensors: [
-        { id: 11, type: 'pH' },
-        { id: 12, type: 'troebelheid' },
-        { id: 13, type: 'temperatuur' },
-      ],
+      availableSensors: [],
     }
   },
   methods: {
@@ -134,7 +130,7 @@ export default {
 
       this.selectedItem = null
     },
-    onActivate() {
+    async onActivate() {
       this.sensorOptions = []
       this.location = {
         lng: 23.988634,
@@ -143,6 +139,35 @@ export default {
         pitch: 0,
         zoom: 9,
       }
+
+      // API calls for all data
+      const newStandardLimitValuesArray = []
+      const newAvailableSensorsArray = []
+
+      // GET standard limit values
+      const standardLimitValuesResponse = await fetch(
+        'https://schoolapi.adwinzijderveld.nl/api/standaard-grenswaarden',
+      )
+      newStandardLimitValuesArray.push(...(await standardLimitValuesResponse.json()))
+
+      //TODO GET available sensors API call -- Jesse nog fixen response: {id: 'zuurstof', type: 1}
+      const availableSensorsResponse = await fetch(
+        'https://schoolapi.adwinzijderveld.nl/api/beschikbare-sensoren',
+      )
+      newAvailableSensorsArray.push(...(await availableSensorsResponse.json()))
+      console.log(newAvailableSensorsArray)
+
+      this.standardLimitValues = newStandardLimitValuesArray
+      this.availableSensors = newAvailableSensorsArray
+
+      this.standardLimitValues.forEach((limitValue) => {
+        const sensorInfo = getSensorTypeInfo(limitValue.type)
+
+        this.sensorTypes.push({
+          naam: sensorInfo.displayName,
+          type: limitValue.type,
+        })
+      })
 
       this.availableSensors.forEach((sensor) => {
         const sensorInfo = getSensorTypeInfo(sensor.type)
@@ -222,33 +247,6 @@ export default {
       this.isDialogActive = false
     },
     required,
-  },
-  async mounted() {
-    // API calls for all data
-    const newStandardLimitValuesArray = []
-
-    // GET standard limit values
-    const standardLimitValuesResponse = await fetch(
-      'https://schoolapi.adwinzijderveld.nl/api/standaard-grenswaarden',
-    )
-    const newStandardLimitValues = await standardLimitValuesResponse.json()
-    newStandardLimitValues.forEach((standardLimitValue) =>
-      newStandardLimitValuesArray.push(standardLimitValue),
-    )
-
-    //TODO GET beschikbare sensoren API call
-    // https://schoolapi.adwinzijderveld.nl/api/beschikbare-sensoren
-
-    this.standardLimitValues = newStandardLimitValuesArray
-
-    this.standardLimitValues.forEach((limitValue) => {
-      const sensorInfo = getSensorTypeInfo(limitValue.type)
-
-      this.sensorTypes.push({
-        naam: sensorInfo.displayName,
-        type: limitValue.type,
-      })
-    })
   },
 }
 </script>

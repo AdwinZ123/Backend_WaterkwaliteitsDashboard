@@ -71,16 +71,7 @@ export default {
       buoys: [],
       deployments: [],
       measurements: [],
-      locations: [
-        {
-          locatie: '23.14587,-31.36589',
-          statusColor: 'green',
-        },
-        {
-          locatie: '22.14587,-30.36589',
-          statusColor: 'orange',
-        },
-      ],
+      locations: [],
       selectedLocation: null,
     }
   },
@@ -109,6 +100,7 @@ export default {
     const newMeasurementsArray = []
     const newBuoysArray = []
     const newDeploymentsArray = []
+    const newLocationsArray = []
 
     // GET measurements
     const measurementsResponse = await fetch('https://schoolapi.adwinzijderveld.nl/api/metingen')
@@ -123,20 +115,20 @@ export default {
 
     // GET buoys
     const buoysResponse = await fetch('https://schoolapi.adwinzijderveld.nl/api/boeien')
-    const newBuoys = await buoysResponse.json()
-    newBuoys.forEach((buoy) => newBuoysArray.push(buoy))
+    newBuoysArray.push(...(await buoysResponse.json()))
 
     // GET deployments
     const deploymentsResponse = await fetch('https://schoolapi.adwinzijderveld.nl/api/deployments')
-    const newDeployments = await deploymentsResponse.json()
-    newDeployments.forEach((deployment) => newDeploymentsArray.push(deployment))
+    newDeploymentsArray.push(...(await deploymentsResponse.json()))
+
+    //GET locaties
+    const locationsResponse = await fetch('https://schoolapi.adwinzijderveld.nl/api/locaties')
+    newLocationsArray.push(...(await locationsResponse.json()))
 
     this.measurements = newMeasurementsArray
     this.buoys = newBuoysArray
     this.deployments = newDeploymentsArray
-
-    //TODO GET locaties API call
-    // https://schoolapi.adwinzijderveld.nl/api/locaties
+    this.locations = newLocationsArray
 
     // Selecteer het eerste item bij het laden van de component
     if (this.buoys.length > 0) {

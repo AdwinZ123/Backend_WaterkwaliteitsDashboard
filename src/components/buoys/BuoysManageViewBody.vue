@@ -131,13 +131,11 @@ export default {
 
     // GET buoys
     const buoysResponse = await fetch('https://schoolapi.adwinzijderveld.nl/api/boeien')
-    const newBuoys = await buoysResponse.json()
-    newBuoys.forEach((buoy) => newBuoysArray.push(buoy))
+    newBuoysArray.push(...(await buoysResponse.json()))
 
     // GET deployments
     const deploymentsResponse = await fetch('https://schoolapi.adwinzijderveld.nl/api/deployments')
-    const newDeployments = await deploymentsResponse.json()
-    newDeployments.forEach((deployment) => newDeploymentsArray.push(deployment))
+    newDeploymentsArray.push(...(await deploymentsResponse.json()))
 
     this.buoys = newBuoysArray
     this.deployments = newDeploymentsArray

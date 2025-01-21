@@ -59,10 +59,7 @@ export default {
     const standardLimitValuesResponse = await fetch(
       'https://schoolapi.adwinzijderveld.nl/api/standaard-grenswaarden',
     )
-    const newStandardLimitValues = await standardLimitValuesResponse.json()
-    newStandardLimitValues.forEach((standardLimitValue) =>
-      newStandardLimitValuesArray.push(standardLimitValue),
-    )
+    newStandardLimitValuesArray.push(...(await standardLimitValuesResponse.json()))
 
     this.standardLimitValues = newStandardLimitValuesArray
 

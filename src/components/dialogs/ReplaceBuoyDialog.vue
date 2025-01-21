@@ -63,18 +63,24 @@ export default {
       form: false,
       isLoading: false,
       isDialogActive: false,
-      availableBuoys: [
-        {
-          naam: 'Betere boei',
-          deveui: 'AF-01-HB-39-JI',
-        },
-      ],
+      availableBuoys: [],
       selectedBuoy: null,
     }
   },
   methods: {
-    onActivate() {
+    async onActivate() {
       this.selectedBuoy = null
+
+      //GET available buoys API call
+      const newAvailableBuoysArray = []
+
+      const availableBuoysResponse = await fetch(
+        'https://schoolapi.adwinzijderveld.nl/api/beschikbare-boeien',
+      )
+      newAvailableBuoysArray.push(...(await availableBuoysResponse.json()))
+      console.log(newAvailableBuoysArray)
+
+      this.availableBuoys = newAvailableBuoysArray
 
       if (this.availableBuoys.length >= 1) {
         this.selectedBuoy = this.availableBuoys[0]
@@ -96,10 +102,6 @@ export default {
       this.isDialogActive = false
     },
     required,
-  },
-  mounted() {
-    //TODO GET beschikbare boeien API call
-    // https://schoolapi.adwinzijderveld.nl/api/beschikbare-boeien
   },
 }
 </script>
