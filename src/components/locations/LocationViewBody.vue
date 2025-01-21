@@ -50,6 +50,7 @@
       :buoys="buoys"
       :type="type"
       :measurements="filteredMeasurements"
+      :grenswaarden="grenswaarden"
     />
   </div>
 </template>
@@ -69,6 +70,7 @@ export default {
       isPageDataLoaded: false,
       filteredMeasurements: [],
       sensorTypes: [],
+      grenswaarden: [],
     }
   },
   methods: {
@@ -132,12 +134,21 @@ export default {
   },
   mounted() {
     this.sensorTypes = []
+    this.grenswaarden = []
 
     // Collecting all used sensor types at the location
     this.deployments.forEach((deployment) => {
       deployment.configuraties.forEach((configuratie) => {
         const type = configuratie.sensor.type
         if (this.sensorTypes.find((st) => st === type) == null) {
+          this.grenswaarden.push({
+            type: type,
+            slechtboven: configuratie.grenswaarden.slechtboven,
+            goedboven: configuratie.grenswaarden.goedboven,
+            goedonder: configuratie.grenswaarden.goedonder,
+            slechtonder: configuratie.grenswaarden.slechtonder,
+          })
+
           this.sensorTypes.push(type)
         }
       })

@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { getFormattedDate, getSensorTypeInfo } from '@/helper'
+import { getFormattedDate, getSensorTypeInfo, getSensorTypeMinMaxValues } from '@/helper'
 import { Line as LineChartJS } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -56,8 +56,6 @@ export default {
               return
             }
 
-            console.log(this.configuration.sensor.type)
-            console.log(this.configuration.grenswaarden)
             const slechtonder = this.configuration.grenswaarden.slechtonder
             const goedonder = this.configuration.grenswaarden.goedonder
             const goedboven = this.configuration.grenswaarden.goedboven
@@ -101,6 +99,7 @@ export default {
         },
       ]
     },
+    getSensorTypeMinMaxValues,
     getSensorTypeInfo,
     getChartData() {
       const newLabels = []
@@ -127,33 +126,9 @@ export default {
     },
   },
   mounted() {
-    console.log(this.configuration)
-    switch (this.configuration.sensor.type) {
-      case 'temperatuur':
-        this.minValue = -10
-        this.maxValue = 40
-        break
-      case 'zuurstof':
-        this.minValue = 0.0
-        this.maxValue = 10.0
-        break
-      case 'troebelheid':
-        this.minValue = 0
-        this.maxValue = 2000
-        break
-      case 'elektrische_geleiding':
-        this.minValue = 0
-        this.maxValue = 1500
-        break
-      case 'pH':
-        this.minValue = 0.0
-        this.maxValue = 14.0
-        break
-      default:
-        this.minValue = -10
-        this.maxValue = 40
-        break
-    }
+    const minMaxValues = getSensorTypeMinMaxValues(this.configuration.sensor.type)
+    this.minValue = minMaxValues.minValue
+    this.maxValue = minMaxValues.maxValue
 
     this.chartOptions = {
       responsive: true,
