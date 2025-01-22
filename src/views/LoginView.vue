@@ -13,6 +13,8 @@ export default {
     keycloak
       .login({ redirectUri: window.location.href }) // Zorg ervoor dat de URL correct wordt doorgegeven
       .then(() => {
+        localStorage.setItem('vue-token', keycloak.token)
+        localStorage.setItem('vue-refresh-token', keycloak.refreshToken)
         this.$router.push('/home')
       })
       .catch((error) => {
