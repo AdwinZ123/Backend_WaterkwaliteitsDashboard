@@ -162,11 +162,27 @@ export default {
         console.error(error)
       }
     },
-    updateDeploymentPickUpDate(deveui) {
-      this.deployments.find((d) => d.deveui === deveui && d.ophaaldatum === null).ophaaldatum =
-        getCurrentDateTimeString()
+    async updateDeploymentPickUpDate(deveui) {
+      const newDeployment = this.deployments.find(
+        (d) => d.deveui === deveui && d.ophaaldatum === null,
+      )
+      newDeployment.ophaaldatum = getCurrentDateTimeString()
 
-      //TODO update API call
+      console.log(newDeployment)
+
+      // Update deployment API call
+      try {
+        await fetch('https://schoolapi.adwinzijderveld.nl/api/deployments', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newDeployment),
+        })
+        console.log('succes')
+      } catch (error) {
+        console.error(error)
+      }
     },
   },
   async mounted() {
