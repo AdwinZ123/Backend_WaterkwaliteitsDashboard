@@ -52,7 +52,13 @@ export default {
         console.error(error)
       }
     },
-    updateLimitValue(configuration, badUpperLimit, goodUpperLimit, goodLowerLimit, badLowerLimit) {
+    async updateLimitValue(
+      configuration,
+      badUpperLimit,
+      goodUpperLimit,
+      goodLowerLimit,
+      badLowerLimit,
+    ) {
       const deployment = this.deployments.find(
         (d) =>
           d.deveui === configuration.deveui && d.plaatsingsdatum === configuration.plaatsingsdatum,
@@ -64,12 +70,23 @@ export default {
           c.plaatsingsdatum === configuration.plaatsingsdatum,
       )
 
-      configurationToUpdate.grenswaarden.slechtboven = badUpperLimit
-      configurationToUpdate.grenswaarden.goedboven = goodUpperLimit
-      configurationToUpdate.grenswaarden.goedonder = goodLowerLimit
-      configurationToUpdate.grenswaarden.slechtonder = badLowerLimit
+      configurationToUpdate.grenswaarden.slechtboven = parseFloat(badUpperLimit)
+      configurationToUpdate.grenswaarden.goedboven = parseFloat(goodUpperLimit)
+      configurationToUpdate.grenswaarden.goedonder = parseFloat(goodLowerLimit)
+      configurationToUpdate.grenswaarden.slechtonder = parseFloat(badLowerLimit)
 
-      //TODO update API call
+      // Update limit values API call
+      try {
+        await fetch('https://schoolapi.adwinzijderveld.nl/api/grenswaarden', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(configurationToUpdate.grenswaarden),
+        })
+      } catch (error) {
+        console.error(error)
+      }
     },
     replaceBuoy(deveuiOldBuoy, deveuiNewBuoy) {
       const currentDeployment = this.deployments.filter(
@@ -132,10 +149,6 @@ export default {
       } catch (error) {
         console.error(error)
       }
-
-      // Create deployment
-      //    Create meerdere configuraties
-      //        Create grenswaarden
     },
     updateDeploymentPickUpDate(deveui) {
       this.deployments.find((d) => d.deveui === deveui && d.ophaaldatum === null).ophaaldatum =
