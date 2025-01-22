@@ -52,6 +52,8 @@ keycloak
         .then((refreshed) => {
           if (refreshed) {
             // console.info('Token refreshed' + refreshed)
+            localStorage.setItem('vue-token', keycloak.token)
+            localStorage.setItem('vue-refresh-token', keycloak.refreshToken)
           } else {
             // console.warn(
             //   'Token not refreshed, valid for ' +

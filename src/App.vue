@@ -12,7 +12,7 @@
 
         <v-spacer></v-spacer>
 
-        <RouterLink style="text-decoration: none; color: inherit" to="/login"
+        <RouterLink style="text-decoration: none; color: inherit" to="/logout"
           ><v-btn variant="text">Uitloggen</v-btn></RouterLink
         >
       </v-container>
