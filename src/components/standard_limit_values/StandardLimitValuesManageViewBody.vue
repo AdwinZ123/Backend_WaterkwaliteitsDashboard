@@ -32,7 +32,7 @@ export default {
      * @param goodLowerLimit
      * @param badLowerLimit
      */
-    updateLimitValue(
+    async updateLimitValue(
       standardLimitValues,
       badUpperLimit,
       goodUpperLimit,
@@ -48,7 +48,18 @@ export default {
       standardLimitValueToUpdate.goedonder = goodLowerLimit
       standardLimitValueToUpdate.slechtonder = badLowerLimit
 
-      //TODO update API call
+      // Update standard limit values API call
+      try {
+        await fetch('https://schoolapi.adwinzijderveld.nl/api/standaard-grenswaarden', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(standardLimitValueToUpdate),
+        })
+      } catch (error) {
+        console.error(error)
+      }
     },
   },
   async mounted() {

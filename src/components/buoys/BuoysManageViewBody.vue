@@ -52,7 +52,13 @@ export default {
         console.error(error)
       }
     },
-    updateLimitValue(configuration, badUpperLimit, goodUpperLimit, goodLowerLimit, badLowerLimit) {
+    async updateLimitValue(
+      configuration,
+      badUpperLimit,
+      goodUpperLimit,
+      goodLowerLimit,
+      badLowerLimit,
+    ) {
       const deployment = this.deployments.find(
         (d) =>
           d.deveui === configuration.deveui && d.plaatsingsdatum === configuration.plaatsingsdatum,
@@ -64,12 +70,23 @@ export default {
           c.plaatsingsdatum === configuration.plaatsingsdatum,
       )
 
-      configurationToUpdate.grenswaarden.slechtboven = badUpperLimit
-      configurationToUpdate.grenswaarden.goedboven = goodUpperLimit
-      configurationToUpdate.grenswaarden.goedonder = goodLowerLimit
-      configurationToUpdate.grenswaarden.slechtonder = badLowerLimit
+      configurationToUpdate.grenswaarden.slechtboven = parseFloat(badUpperLimit)
+      configurationToUpdate.grenswaarden.goedboven = parseFloat(goodUpperLimit)
+      configurationToUpdate.grenswaarden.goedonder = parseFloat(goodLowerLimit)
+      configurationToUpdate.grenswaarden.slechtonder = parseFloat(badLowerLimit)
 
-      //TODO update API call
+      // Update limit values API call
+      try {
+        await fetch('https://schoolapi.adwinzijderveld.nl/api/grenswaarden', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(configurationToUpdate.grenswaarden),
+        })
+      } catch (error) {
+        console.error(error)
+      }
     },
     replaceBuoy(deveuiOldBuoy, deveuiNewBuoy) {
       const currentDeployment = this.deployments.filter(
@@ -112,10 +129,22 @@ export default {
       this.addDeployment(newDeployment)
       this.updateDeploymentPickUpDate(deveuiOldBuoy)
     },
-    updateBuoyName(deveui, newName) {
+    async updateBuoyName(deveui, newName) {
       this.buoys.find((b) => b.deveui === deveui).naam = newName
+      const newBuoy = this.buoys.find((b) => b.deveui === deveui)
 
-      //TODO update API call
+      // Update buoy API call
+      try {
+        await fetch('https://schoolapi.adwinzijderveld.nl/api/boeien', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newBuoy),
+        })
+      } catch (error) {
+        console.error(error)
+      }
     },
     async addDeployment(newDeployment) {
       this.deployments.unshift(newDeployment)
@@ -132,16 +161,25 @@ export default {
       } catch (error) {
         console.error(error)
       }
-
-      // Create deployment
-      //    Create meerdere configuraties
-      //        Create grenswaarden
     },
-    updateDeploymentPickUpDate(deveui) {
-      this.deployments.find((d) => d.deveui === deveui && d.ophaaldatum === null).ophaaldatum =
-        getCurrentDateTimeString()
+    async updateDeploymentPickUpDate(deveui) {
+      const newDeployment = this.deployments.find(
+        (d) => d.deveui === deveui && d.ophaaldatum === null,
+      )
+      newDeployment.ophaaldatum = getCurrentDateTimeString()
 
-      //TODO update API call
+      // Update deployment API call
+      try {
+        await fetch('https://schoolapi.adwinzijderveld.nl/api/deployments', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newDeployment),
+        })
+      } catch (error) {
+        console.error(error)
+      }
     },
   },
   async mounted() {
