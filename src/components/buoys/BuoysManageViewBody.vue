@@ -39,19 +39,15 @@ export default {
     async addBuoy(buoy) {
       this.buoys.push(buoy)
 
-      //TODO create API call
-      // POST https://schoolapi.adwinzijderveld.nl/api/boeien {"deveui": 'mijn waarde', "naam": 'mijn waarde'}
+      // Create buoy API call
       try {
-        const addBuoyResponse = await fetch('https://schoolapi.adwinzijderveld.nl/api/boeien', {
+        await fetch('https://schoolapi.adwinzijderveld.nl/api/boeien', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: buoy,
+          body: JSON.stringify(buoy),
         })
-
-        const addBuoyResponseMessage = await addBuoyResponse.json()
-        console.log(addBuoyResponseMessage)
       } catch (error) {
         console.error(error)
       }
@@ -124,22 +120,15 @@ export default {
     async addDeployment(newDeployment) {
       this.deployments.unshift(newDeployment)
 
-      //TODO create API call
-      // POST https://schoolapi.adwinzijderveld.nl/api/deployments {newDeployment object}
+      // Create deployment API call
       try {
-        const addDeploymentResponse = await fetch(
-          'https://schoolapi.adwinzijderveld.nl/api/deployments',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: newDeployment,
+        await fetch('https://schoolapi.adwinzijderveld.nl/api/deployments', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        )
-
-        const addDeploymentResponseMessage = await addDeploymentResponse.json()
-        console.log(addDeploymentResponseMessage)
+          body: JSON.stringify(newDeployment),
+        })
       } catch (error) {
         console.error(error)
       }

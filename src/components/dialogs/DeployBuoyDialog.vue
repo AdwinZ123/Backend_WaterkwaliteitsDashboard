@@ -150,12 +150,11 @@ export default {
       )
       newStandardLimitValuesArray.push(...(await standardLimitValuesResponse.json()))
 
-      //TODO GET available sensors API call -- Jesse nog fixen response: {id: 'zuurstof', type: 1}
+      // GET available sensors API call
       const availableSensorsResponse = await fetch(
         'https://schoolapi.adwinzijderveld.nl/api/beschikbare-sensoren',
       )
       newAvailableSensorsArray.push(...(await availableSensorsResponse.json()))
-      console.log(newAvailableSensorsArray)
 
       this.standardLimitValues = newStandardLimitValuesArray
       this.availableSensors = newAvailableSensorsArray
@@ -207,8 +206,7 @@ export default {
       selectedSensors.forEach(async (sensor) => {
         let id = sensor.id
         if (id == null) {
-          //TODO create sensor API call
-          // POST https://schoolapi.adwinzijderveld.nl/api/sensoren {"type": 'mijn waarde'}
+          // Create sensor API call
           try {
             const addSensorResponse = await fetch(
               'https://schoolapi.adwinzijderveld.nl/api/sensoren',
@@ -217,12 +215,11 @@ export default {
                 headers: {
                   'Content-Type': 'application/json',
                 },
-                body: { type: sensor.type },
+                body: JSON.stringify({ type: sensor.type }),
               },
             )
 
             const newCreatedSensor = await addSensorResponse.json()
-            console.log(newCreatedSensor)
             id = newCreatedSensor.id
           } catch (error) {
             console.error(error)

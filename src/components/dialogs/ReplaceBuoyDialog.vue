@@ -78,7 +78,6 @@ export default {
         'https://schoolapi.adwinzijderveld.nl/api/beschikbare-boeien',
       )
       newAvailableBuoysArray.push(...(await availableBuoysResponse.json()))
-      console.log(newAvailableBuoysArray)
 
       this.availableBuoys = newAvailableBuoysArray
 

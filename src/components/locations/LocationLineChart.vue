@@ -36,48 +36,6 @@ export default {
       maxValue: 0.0,
       isPageDataLoaded: false,
       sensorInfo: null,
-      plugins: [
-        {
-          /**
-           * Add a colored background to the chart to show the sensor limit values on the frontend
-           * @param chart
-           */
-          beforeDraw: function (chart) {
-            const ctx = chart.ctx
-            const canvas = chart.canvas
-            const chartArea = chart.chartArea
-
-            //TODO: Create algorithm to make the background responsive to the sensor limit values
-            // Chart background
-            var gradientBack = canvas.getContext('2d').createLinearGradient(0, 250, 0, 0)
-
-            // Direct
-            // Red
-            gradientBack.addColorStop(0, 'rgba(255, 0, 0, 0.7)')
-            gradientBack.addColorStop(0.2, 'rgba(255, 0, 0, 0.7)')
-            // Orange
-            gradientBack.addColorStop(0.21, 'rgba(255, 165, 0, 0.7)')
-            gradientBack.addColorStop(0.4, 'rgba(255, 165, 0, 0.7)')
-            // Green
-            gradientBack.addColorStop(0.41, 'rgba(0, 255, 0, 0.7)')
-            gradientBack.addColorStop(0.6, 'rgba(0, 255, 0, 0.7)')
-            // Orange
-            gradientBack.addColorStop(0.61, 'rgba(255, 165, 0, 0.7)')
-            gradientBack.addColorStop(0.8, 'rgba(255, 165, 0, 0.7)')
-            // Red
-            gradientBack.addColorStop(0.81, 'rgba(255, 0, 0, 0.7)')
-            gradientBack.addColorStop(1, 'rgba(255, 0, 0, 0.7)')
-
-            ctx.fillStyle = gradientBack
-            ctx.fillRect(
-              chartArea.left,
-              chartArea.bottom,
-              chartArea.right - chartArea.left,
-              chartArea.top - chartArea.bottom,
-            )
-          },
-        },
-      ],
       chartOptions: null,
       colorCodes: [
         '#000000', // Zwart
