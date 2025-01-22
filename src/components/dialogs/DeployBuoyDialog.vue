@@ -112,11 +112,7 @@ export default {
       standardLimitValues: [],
       sensorTypes: [],
       sensorOptions: [],
-      availableSensors: [
-        { id: 11, type: 'pH' },
-        { id: 12, type: 'troebelheid' },
-        { id: 13, type: 'temperatuur' },
-      ],
+      availableSensors: [],
     }
   },
   methods: {
@@ -134,7 +130,7 @@ export default {
 
       this.selectedItem = null
     },
-    onActivate() {
+    async onActivate() {
       this.sensorOptions = []
       this.location = {
         lng: 23.988634,
@@ -143,6 +139,34 @@ export default {
         pitch: 0,
         zoom: 9,
       }
+
+      // API calls for all data
+      const newStandardLimitValuesArray = []
+      const newAvailableSensorsArray = []
+
+      // GET standard limit values
+      const standardLimitValuesResponse = await fetch(
+        'https://schoolapi.adwinzijderveld.nl/api/standaard-grenswaarden',
+      )
+      newStandardLimitValuesArray.push(...(await standardLimitValuesResponse.json()))
+
+      // GET available sensors API call
+      const availableSensorsResponse = await fetch(
+        'https://schoolapi.adwinzijderveld.nl/api/beschikbare-sensoren',
+      )
+      newAvailableSensorsArray.push(...(await availableSensorsResponse.json()))
+
+      this.standardLimitValues = newStandardLimitValuesArray
+      this.availableSensors = newAvailableSensorsArray
+
+      this.standardLimitValues.forEach((limitValue) => {
+        const sensorInfo = getSensorTypeInfo(limitValue.type)
+
+        this.sensorTypes.push({
+          naam: sensorInfo.displayName,
+          type: limitValue.type,
+        })
+      })
 
       this.availableSensors.forEach((sensor) => {
         const sensorInfo = getSensorTypeInfo(sensor.type)
@@ -157,7 +181,7 @@ export default {
 
       this.isDialogActive = true
     },
-    onSubmit() {
+    async onSubmit() {
       if (!this.form) return
 
       const selectedSensors = this.sensorOptions.filter((sensor) => sensor.enabled === true)
@@ -179,13 +203,28 @@ export default {
         configuraties: [],
       }
 
-      selectedSensors.forEach((sensor, i) => {
+      selectedSensors.forEach(async (sensor) => {
         let id = sensor.id
         if (id == null) {
-          id = 999 - i
-        }
+          // Create sensor API call
+          try {
+            const addSensorResponse = await fetch(
+              'https://schoolapi.adwinzijderveld.nl/api/sensoren',
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ type: sensor.type }),
+              },
+            )
 
-        //TODO create sensor API call
+            const newCreatedSensor = await addSensorResponse.json()
+            id = newCreatedSensor.id
+          } catch (error) {
+            console.error(error)
+          }
+        }
 
         const selectedStandardLimitValue = this.standardLimitValues.find(
           (limitValue) => limitValue.type === sensor.type,
@@ -221,32 +260,6 @@ export default {
       this.isDialogActive = false
     },
     required,
-  },
-  async mounted() {
-    // API calls for all data
-    const newStandardLimitValuesArray = []
-
-    // GET standard limit values
-    const standardLimitValuesResponse = await fetch(
-      'https://schoolapi.adwinzijderveld.nl/api/standaard-grenswaarden',
-    )
-    const newStandardLimitValues = await standardLimitValuesResponse.json()
-    newStandardLimitValues.forEach((standardLimitValue) =>
-      newStandardLimitValuesArray.push(standardLimitValue),
-    )
-
-    //TODO GET beschikbare sensoren API call
-
-    this.standardLimitValues = newStandardLimitValuesArray
-
-    this.standardLimitValues.forEach((limitValue) => {
-      const sensorInfo = getSensorTypeInfo(limitValue.type)
-
-      this.sensorTypes.push({
-        naam: sensorInfo.displayName,
-        type: limitValue.type,
-      })
-    })
   },
 }
 </script>

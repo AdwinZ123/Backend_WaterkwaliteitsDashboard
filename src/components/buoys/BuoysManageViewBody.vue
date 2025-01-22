@@ -36,10 +36,21 @@ export default {
     }
   },
   methods: {
-    addBuoy(buoy) {
+    async addBuoy(buoy) {
       this.buoys.push(buoy)
 
-      //TODO create API call
+      // Create buoy API call
+      try {
+        await fetch('https://schoolapi.adwinzijderveld.nl/api/boeien', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(buoy),
+        })
+      } catch (error) {
+        console.error(error)
+      }
     },
     updateLimitValue(configuration, badUpperLimit, goodUpperLimit, goodLowerLimit, badLowerLimit) {
       const deployment = this.deployments.find(
@@ -100,18 +111,31 @@ export default {
 
       this.addDeployment(newDeployment)
       this.updateDeploymentPickUpDate(deveuiOldBuoy)
-
-      //TODO create and update API calls
     },
     updateBuoyName(deveui, newName) {
       this.buoys.find((b) => b.deveui === deveui).naam = newName
 
       //TODO update API call
     },
-    addDeployment(newDeployment) {
+    async addDeployment(newDeployment) {
       this.deployments.unshift(newDeployment)
 
-      //TODO create API call
+      // Create deployment API call
+      try {
+        await fetch('https://schoolapi.adwinzijderveld.nl/api/deployments', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newDeployment),
+        })
+      } catch (error) {
+        console.error(error)
+      }
+
+      // Create deployment
+      //    Create meerdere configuraties
+      //        Create grenswaarden
     },
     updateDeploymentPickUpDate(deveui) {
       this.deployments.find((d) => d.deveui === deveui && d.ophaaldatum === null).ophaaldatum =
@@ -127,13 +151,11 @@ export default {
 
     // GET buoys
     const buoysResponse = await fetch('https://schoolapi.adwinzijderveld.nl/api/boeien')
-    const newBuoys = await buoysResponse.json()
-    newBuoys.forEach((buoy) => newBuoysArray.push(buoy))
+    newBuoysArray.push(...(await buoysResponse.json()))
 
     // GET deployments
     const deploymentsResponse = await fetch('https://schoolapi.adwinzijderveld.nl/api/deployments')
-    const newDeployments = await deploymentsResponse.json()
-    newDeployments.forEach((deployment) => newDeploymentsArray.push(deployment))
+    newDeploymentsArray.push(...(await deploymentsResponse.json()))
 
     this.buoys = newBuoysArray
     this.deployments = newDeploymentsArray

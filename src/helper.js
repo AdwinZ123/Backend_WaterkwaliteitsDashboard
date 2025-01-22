@@ -78,3 +78,38 @@ export function getSensorTypeInfo(type) {
       }
   }
 }
+
+export function getSensorTypeMinMaxValues(type) {
+  switch (type) {
+    case 'temperatuur':
+      return {
+        minValue: -10,
+        maxValue: 40,
+      }
+    case 'zuurstof':
+      return {
+        minValue: 0.0,
+        maxValue: 10.0,
+      }
+    case 'troebelheid':
+      return {
+        minValue: 0,
+        maxValue: 2000,
+      }
+    case 'elektrische_geleiding':
+      return {
+        minValue: 0,
+        maxValue: 1500,
+      }
+    case 'pH':
+      return {
+        minValue: 0.0,
+        maxValue: 14.0,
+      }
+    default:
+      return {
+        minValue: -10,
+        maxValue: 40,
+      }
+  }
+}
