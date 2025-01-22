@@ -13,6 +13,7 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       alias: '/home',
+      meta: { requiresAuth: true },
     },
     {
       path: '/login',
@@ -21,6 +22,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: LoginView,
+      meta: { requiresAuth: true },
     },
     {
       path: '/beheer',
@@ -29,6 +31,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: AdminView,
+      meta: { requiresAuth: true, roles: ['admin'] },
     },
     {
       path: '/logout',
@@ -51,6 +54,13 @@ router.beforeEach((to, from, next) => {
       .catch((error) => {
         console.error('Fout tijdens de Keycloak callback', error)
       }) // Stuur gebruikers naar de Keycloak-loginpagina
+  } else if (
+    to.meta.roles &&
+    !to.meta.roles.some((role) => keycloak.tokenParsed?.realm_access?.roles?.includes(role))
+  ) {
+    // Geen toegang
+    alert('Je hebt geen toegang tot deze pagina.')
+    next('/')
   } else {
     next()
   }

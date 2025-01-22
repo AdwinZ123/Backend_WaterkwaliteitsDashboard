@@ -6,7 +6,7 @@
         <RouterLink style="text-decoration: none; color: inherit" to="/"
           ><v-btn variant="text">Home</v-btn></RouterLink
         >
-        <RouterLink style="text-decoration: none; color: inherit" to="/beheer"
+        <RouterLink v-if="isAdmin" style="text-decoration: none; color: inherit" to="/beheer"
           ><v-btn variant="text">Beheer</v-btn></RouterLink
         >
 
@@ -27,9 +27,15 @@
 </template>
 
 <script>
+import keycloak from '@/keycloak.js'
 import { RouterLink, RouterView } from 'vue-router'
 
 export default {
   components: [RouterLink, RouterView],
+  computed: {
+    isAdmin() {
+      return keycloak.tokenParsed?.realm_access?.roles?.includes('admin')
+    },
+  },
 }
 </script>
