@@ -1,6 +1,6 @@
 # Waterkwaliteits Dashboard
 
-De live omgeving van de website is te bereiken via: https://school.adwinzijderveld.nl/
+De live omgeving van de website is te bereiken via: https://school2.adwinzijderveld.nl/
 
 Voor het ontwikkelen van de gebruikt gemaakt van verschillende tools, frameworks en libraries.
 
