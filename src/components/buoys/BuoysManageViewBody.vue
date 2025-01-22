@@ -129,10 +129,22 @@ export default {
       this.addDeployment(newDeployment)
       this.updateDeploymentPickUpDate(deveuiOldBuoy)
     },
-    updateBuoyName(deveui, newName) {
+    async updateBuoyName(deveui, newName) {
       this.buoys.find((b) => b.deveui === deveui).naam = newName
+      const newBuoy = this.buoys.find((b) => b.deveui === deveui)
 
-      //TODO update API call
+      // Update buoy API call
+      try {
+        await fetch('https://schoolapi.adwinzijderveld.nl/api/boeien', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newBuoy),
+        })
+      } catch (error) {
+        console.error(error)
+      }
     },
     async addDeployment(newDeployment) {
       this.deployments.unshift(newDeployment)
