@@ -168,8 +168,6 @@ export default {
       )
       newDeployment.ophaaldatum = getCurrentDateTimeString()
 
-      console.log(newDeployment)
-
       // Update deployment API call
       try {
         await fetch('https://schoolapi.adwinzijderveld.nl/api/deployments', {
@@ -179,7 +177,6 @@ export default {
           },
           body: JSON.stringify(newDeployment),
         })
-        console.log('succes')
       } catch (error) {
         console.error(error)
       }
